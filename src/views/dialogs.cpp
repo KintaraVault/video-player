@@ -320,7 +320,7 @@ private:
         m_window = std::make_unique<Window>();
         m_window->setTitle(tr("Open URL"));
         m_window->setTransientParent(&m_owner.window(), true);
-        m_window->setBackgroundColor(ColorId::SecondBackground);
+        m_window->setBackgroundColor(ColorId::PanelBackground);
         auto root = std::make_unique<Root>(*this);
         m_root = root.get();
         m_window->setContentView(std::move(root));
