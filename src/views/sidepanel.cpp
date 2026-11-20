@@ -267,13 +267,13 @@ protected:
 
     void paint(Painter& painter) override
     {
-        const Theme& theme = Theme::current();
-        painter.drawRoundedRect(localRect(), {theme.smallRadius, 0, Corners::Circular}, white(0.08));
+        const RectF bounds = localRect();
+        painter.drawRoundedRect(bounds, {bounds.height / 2}, white(0.08), 1 / painter.scale(), white(.10));
         for (size_t i = 0; i < m_tabs.size(); ++i) {
             const double alpha = int(i) == m_current ? 0.2 : m_tabs[i]->isHoveredNow() ? 0.06 : 0;
             if (alpha > 0)
-                painter.drawRoundedRect(m_tabs[i]->geometry(), {theme.smallRadius - 2, 0, Corners::Circular},
-                                        white(alpha));
+                painter.drawRoundedRect(m_tabs[i]->geometry(), {m_tabs[i]->geometry().height / 2},
+                                        white(alpha), 1 / painter.scale(), white(int(i) == m_current ? .14 : 0));
         }
     }
 
@@ -348,11 +348,11 @@ protected:
         const Theme& theme = Theme::current();
         Color color{0, 0, 0, 0};
         if (m_current)
-            color = theme.highlight.withAlpha(0.55);
+            color = theme.highlight.withAlpha(0.36);
         else if (m_hovered || (m_row == m_panel.m_currentRow && m_panel.hasFocus()))
             color = white(0.08);
         if (color.a > 0)
-            painter.drawRoundedRect(localRect(), {theme.mediumRadius, 0, Corners::Circular}, color);
+            painter.drawRoundedRect(localRect(), {design::menuItemRadius, 0, themeCorners()}, color);
     }
 
     void pointerPress(const PointerEvent& event) override
@@ -415,7 +415,7 @@ SidePanel::SidePanel(MainWindow& owner)
     m_list->setName("playlistView");
     m_repeat->setName("repeatButton");
     m_add->setName("addFilesButton");
-    m_list->setRowHeight(36);
+    m_list->setRowHeight(design::sidebarRowHeight);
     m_list->setClipsChildren(true);
     m_tracksView->setClipsChildren(true);
     m_playbackView->setClipsChildren(true);
