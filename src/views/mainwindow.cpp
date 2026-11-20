@@ -264,9 +264,11 @@ protected:
 
     void paint(Painter& painter) override
     {
-        // Black behind the welcome page and the error, and wherever the
-        // software picture is not; a video surface shows through elsewhere.
-        if (!m_owner.hasMedia() || !m_owner.m_errorMessage.empty() || !video->usesSurface())
+        // The welcome and error pages are UI. The playback canvas and
+        // letterboxing are not: keep their black independent of the wallpaper.
+        if (!m_owner.hasMedia() || !m_owner.m_errorMessage.empty())
+            painter.fillRect(localRect(), wallpaperTinted(Color::rgb(0x181818)).resolve());
+        else if (!video->usesSurface())
             painter.fillRect(localRect(), Color{0, 0, 0, 255});
     }
 
